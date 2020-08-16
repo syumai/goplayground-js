@@ -20,7 +20,7 @@ $ npm install --save @syumai/goplayground-node
 ## Usage
 
 ```ts
-import { GoPlayground } from "@syumai/goplayground";
+import { GoPlayground } from "@syumai/goplayground"; // or "@syumai/goplayground-node"
 
 const src = `package main
 func main() {}`
