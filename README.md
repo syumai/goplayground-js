@@ -7,8 +7,16 @@
 
 ### For Browsers
 
+#### With npm
+
 ```console
 $ npm install --save @syumai/goplayground
+```
+
+#### With CDN
+
+```js
+import { GoPlayground } from "https://unpkg.com/@syumai/goplayground/index.js";
 ```
 
 ### For Node.js
