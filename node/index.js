@@ -13,10 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const playground_1 = require("./playground");
+const goplayground_1 = require("@syumai/goplayground");
+const node_fetch_1 = __importDefault(require("node-fetch"));
+const form_data_1 = __importDefault(require("form-data"));
 const fs_1 = __importDefault(require("fs"));
+// Apply polyfills
+// @ts-ignore
+globalThis.fetch = node_fetch_1.default;
+// @ts-ignore
+globalThis.FormData = form_data_1.default;
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    const gp = new playground_1.GoPlayground(playground_1.defaultGoPlaygroundHostName);
+    const gp = new goplayground_1.GoPlayground(goplayground_1.defaultGoPlaygroundHostName);
     if (process.argv.length < 4) {
         console.error("arguments must be given");
         return;

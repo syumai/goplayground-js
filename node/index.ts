@@ -1,7 +1,19 @@
 #!/usr/bin/env node
 
-import { GoPlayground, defaultGoPlaygroundHostName } from "./playground";
+import {
+  GoPlayground,
+  defaultGoPlaygroundHostName,
+} from "@syumai/goplayground";
+export * from "@syumai/goplayground";
+import fetch from "node-fetch";
+import FormData from "form-data";
 import fs from "fs";
+
+// Apply polyfills
+// @ts-ignore
+globalThis.fetch = fetch;
+// @ts-ignore
+globalThis.FormData = FormData;
 
 type Command = "run" | "fmt" | "share";
 

@@ -3,19 +3,12 @@
 * The Go Playground API client for Browsers / Node.js
 * Command line tool for Node.js is also available.
 
-## Usage
+## Installation
 
 ### For Browsers
 
 ```console
 $ npm install --save @syumai/goplayground
-```
-
-```ts
-import { GoPlayground } from "@syumai/goplayground";
-
-const gp = new GoPlayground();
-const result = await gp.format(src);
 ```
 
 ### For Node.js
@@ -24,11 +17,22 @@ const result = await gp.format(src);
 $ npm install --save @syumai/goplayground-node
 ```
 
+## Usage
+
 ```ts
-import { GoPlayground } from "@syumai/goplayground-node/playground";
+import { GoPlayground } from "@syumai/goplayground";
+
+const src = `package main
+func main() {}`
 
 const gp = new GoPlayground();
-const result = await gp.format(src);
+
+// format src
+await gp.format(src);
+// run src
+await gp.compile(src);
+// publish src
+await gp.share(src);
 ```
 
 ## Use `goplayground-node` as a CLI tool
