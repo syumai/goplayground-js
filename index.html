@@ -20,6 +20,18 @@
       border: #999 1px solid;
     }
 
+    .result .line {
+      width: 100%;
+    }
+
+    .result .line.stdout {
+      color: #000;
+    }
+
+    .result .line.stderr {
+      color: #c33;
+    }
+
     .button-container {
       display: flex;
     }
@@ -37,6 +49,7 @@
       <button id="gpShareBtn">Share</button>
     </div>
   </div>
+
   <script type="module">
     import { GoPlayground } from "./index.js";
 
@@ -51,14 +64,37 @@
     const gpFmtBtn = document.getElementById("gpFmtBtn");
     const gpShareBtn = document.getElementById("gpShareBtn");
 
+    const createLine = (kind, message) => {
+        const line = document.createElement("div")
+        line.classList.add("line");
+        line.classList.add(kind);
+        line.textContent = message;
+        return line;
+    }
+
     gpRunBtn.addEventListener("click", async () => {
-      const { Events } = await gp.compile(gpBody.value);
-      gpResult.textContent = Events[0].Message;
+      const result = await gp.compile(gpBody.value);
+      gpResult.innerHTML = "";
+      if (result.Errors !== "") {
+        const line = createLine("stderr", result.Errors);
+        gpResult.appendChild(line);
+        return;
+      }
+      for (const event of result.Events) {
+        const line = createLine(event.Kind, event.Message);
+        gpResult.appendChild(line);
+      }
     });
 
     gpFmtBtn.addEventListener("click", async () => {
       const result = await gp.format(gpBody.value);
-      gpBody.value = result;
+      gpResult.innerHTML = "";
+      if (result.Error !== "") {
+        const line = createLine("stderr", result.Error);
+        gpResult.appendChild(line);
+        return;
+      }
+      gpBody.value = result.Body;
     });
 
     gpShareBtn.addEventListener("click", async () => {

@@ -52,7 +52,7 @@ type Command = "run" | "fmt" | "share";
     case "fmt": {
       const result = await gp.format(data);
       if (result.Error !== "") {
-        console.error(result.Error);
+        process.stderr.write(result.Error);
         break;
       }
       process.stdout.write(result.Body);
