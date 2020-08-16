@@ -1,6 +1,6 @@
 {
   "name": "@syumai/goplayground-node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Go Playground API Client for Node.js.",
   "main": "index.js",
   "scripts": {
