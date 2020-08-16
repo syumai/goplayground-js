@@ -76,7 +76,6 @@
     }
 
     gpBody.addEventListener('keydown', (e) => {
-      console.log(e.key);
       if (e.key === "Tab") {
         e.preventDefault();
         e.target.setRangeText("\t", e.target.selectionStart, e.target.selectionEnd, "end");
