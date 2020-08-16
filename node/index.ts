@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { GoPlayground, defaultGoPlaygroundHostName } from "./playground";
 import fs from "fs";
 

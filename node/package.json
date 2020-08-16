@@ -1,8 +1,9 @@
 {
   "name": "@syumai/goplayground-node",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Go Playground API Client for Node.js.",
   "main": "index.js",
+  "bin": "index.js",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
