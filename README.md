@@ -12,7 +12,7 @@ $ npm install --save @syumai/goplayground
 ```
 
 ```ts
-import { GoPlayground } from "@syumai/goplayground"
+import { GoPlayground } from "@syumai/goplayground";
 
 const gp = new GoPlayground();
 const result = await gp.format(src);
@@ -25,7 +25,7 @@ $ npm install --save @syumai/goplayground-node
 ```
 
 ```ts
-import { GoPlayground } from "@syumai/goplayground-node/playground"
+import { GoPlayground } from "@syumai/goplayground-node/playground";
 
 const gp = new GoPlayground();
 const result = await gp.format(src);
