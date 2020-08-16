@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import FormData from "form-data";
-export * from "@syumai/goplayground-js";
+export * from "@syumai/goplayground";
 
 // Apply polyfills
 // @ts-ignore

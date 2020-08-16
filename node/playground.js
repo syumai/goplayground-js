@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const form_data_1 = __importDefault(require("form-data"));
-__exportStar(require("@syumai/goplayground-js"), exports);
+__exportStar(require("@syumai/goplayground"), exports);
 // Apply polyfills
 // @ts-ignore
 globalThis.fetch = node_fetch_1.default;
