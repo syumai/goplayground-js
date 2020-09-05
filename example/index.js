@@ -6,7 +6,9 @@
  */
 
 import { GoPlayground } from "../index.js";
-const gp = new GoPlayground();
+const gpOriginal = new GoPlayground();
+const gpGo2Go = new GoPlayground("https://go2goplay.golang.org");
+let gp = gpOriginal;
 
 const gpBody = document.getElementById("gpBody");
 const editor = CodeMirror.fromTextArea(gpBody, {
@@ -21,9 +23,10 @@ const editor = CodeMirror.fromTextArea(gpBody, {
 window.editor = editor;
 
 const optionsStr = window.localStorage.getItem("goplayground-options");
-const optionKeys = ["goimports", "vimMode", "tabSize"];
+const optionKeys = ["goimports", "go2go", "vimMode", "tabSize"];
 const defaultOptions = {
   goimports: false,
+  go2go: false,
   vimMode: false,
   tabSize: 8,
 };
@@ -121,6 +124,11 @@ function applyOptions() {
   editor.setOption("keyMap", options.vimMode ? "vim" : "default");
   editor.setOption("tabSize", options.tabSize);
   editor.setOption("indentUnit", options.tabSize);
+  if (options.go2go) {
+    gp = gpGo2Go;
+  } else {
+    gp = gpOriginal;
+  }
 }
 
 function initOptionsForm() {
