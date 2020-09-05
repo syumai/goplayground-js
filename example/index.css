@@ -7,7 +7,7 @@
   font-size: 11pt;
   height: calc(100% - 300px);
   width: 100%;
-  min-height: 400px;
+  min-height: 300px;
 }
 
 .CodeMirror-gutters {
