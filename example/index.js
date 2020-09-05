@@ -96,7 +96,7 @@ async function executeShare() {
   const result = await gp.share(gpBody.value);
   gpResult.innerHTML = "";
   const link = document.createElement("a");
-  const url = `https://play.golang.org/p/${result}`;
+  const url = `${gp.hostName}/p/${result}`;
   link.textContent = url;
   link.href = url;
   link.target = "_blank";
