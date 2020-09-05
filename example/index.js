@@ -20,6 +20,19 @@ const editor = CodeMirror.fromTextArea(gpBody, {
 });
 window.editor = editor;
 
+const optionsStr = window.localStorage.getItem("goplayground-options");
+const optionKeys = ["goimports", "vimMode", "tabSize"];
+const defaultOptions = {
+  goimports: false,
+  vimMode: false,
+  tabSize: 8,
+};
+const parsedOptions = JSON.parse(optionsStr) || {};
+const options =
+  optionKeys.length === Object.keys(parsedOptions).length
+    ? parsedOptions
+    : defaultOptions;
+
 const gpResult = document.getElementById("gpResult");
 const gpOptions = document.getElementById("gpOptions");
 
@@ -63,7 +76,7 @@ Program exited.`
 async function executeFmt() {
   editor.save();
   gpResult.textContent = waitingMsg;
-  const result = await gp.format(gpBody.value);
+  const result = await gp.format(gpBody.value, options.goimports);
   gpResult.textContent = "";
   if (result.Error !== "") {
     const line = createLine("stderr", result.Error);
@@ -103,19 +116,6 @@ window.addEventListener("keypress", (e) => {
     }
   }
 });
-
-const optionsStr = window.localStorage.getItem("goplayground-options");
-const optionKeys = ["goimports", "vimMode", "tabSize"];
-const defaultOptions = {
-  goimports: false,
-  vimMode: false,
-  tabSize: 8,
-};
-const parsedOptions = JSON.parse(optionsStr) || {};
-const options =
-  optionKeys.length === Object.keys(parsedOptions).length
-    ? parsedOptions
-    : defaultOptions;
 
 function applyOptions() {
   editor.setOption("keyMap", options.vimMode ? "vim" : "default");
