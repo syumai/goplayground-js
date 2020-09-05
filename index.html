@@ -3,76 +3,7 @@
   <title>The Go Playground</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/lib/codemirror.css" integrity="sha256-F8x+Z3ibZvrT6AYhdYRAhBaA77XYocFUTGA/lMGNVYE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize-css@2.3.1/normalize.css" integrity="sha256-oQhE1gzQ/RLRlHgKfVUhrAe03FJbQLmTjY5ngEJPhdg=" crossorigin="anonymous">
-  <style>
-    header, main, footer {
-      width: 100%;
-    }
-
-    header {
-      height: 52px;
-      display: flex;
-      align-items: center;
-      background-color: #e0ebf5;
-    }
-
-    header .title {
-      margin-left: 16px;
-      font-size: 20px;
-    }
-
-    header .button-container {
-      margin-left: 16px;
-      display: flex;
-    }
-
-    header .link-to-github {
-      margin-left: 12px;
-    }
-
-    main {
-      width: 100%;
-      height: calc(100vh - 52px);
-    }
-
-    .code-body {
-      display: none;
-    }
-
-    .CodeMirror {
-      background-color:#ffd;
-      font-size: 11pt;
-      height: calc(100% - 300px);
-      width: 100%;
-      min-height: 400px;
-    }
-
-    .CodeMirror-gutters {
-      background: inherit;
-    }
-
-    .result {
-      width: calc(100% - 16px);
-      height: calc(300px - 16px);
-      padding: 8px;
-      white-space: pre;
-    }
-
-    .result .line {
-      width: 100%;
-    }
-
-    .result .line.stdout {
-      color: #000;
-    }
-
-    .result .line.stderr {
-      color: #c33;
-    }
-
-    .result .line.system {
-      color: #999;
-    }
-  </style>
+  <link rel="stylesheet" href="./example/index.css">
 </head>
 
 <body>
@@ -82,6 +13,7 @@
       <button id="gpRunBtn">Run</button>
       <button id="gpFmtBtn">Format</button>
       <button id="gpShareBtn">Share</button>
+      <button id="gpOptionsBtn">Options</button>
     </div>
     <div class="link-to-github">
       <a href="https://github.com/syumai/goplayground-js" target="_blank">GitHub</a>
@@ -100,103 +32,34 @@ func main() {
 }
 </textarea>
     <div id="gpResult" class="result"></div>
+    <div id="gpOptions" class="options hidden">
+      <form id="gpOptionsForm" action="#">
+        <div>
+          <label>
+            <input type="checkbox" name="goimports">
+            goimports
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="vimMode">
+            Vim mode
+          </label>
+        </div>
+        <div>
+          <label>
+            Tab width
+            <input type="number" name="tabSize">
+          </label>
+        </div>
+        <button>Save</button>
+      </form>
+    </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/mode/go/go.js"></script>
-  <script type="module">
-    import { GoPlayground } from "./index.js";
-    const gp = new GoPlayground();
-
-    const gpForm = document.getElementById("gpForm");
-    const gpBody = document.getElementById("gpBody");
-    const editor = CodeMirror.fromTextArea(gpBody, {
-      lineNumbers: true,
-      mode: "go",
-      tabSize: 8,
-      indentUnit: 8,
-      smartIndent: true,
-      indentWithTabs: true,
-      matchBrackets: true,
-    });
-    window.editor = editor;
-
-    const gpResult = document.getElementById("gpResult");
-    const gpRunBtn = document.getElementById("gpRunBtn");
-    const gpFmtBtn = document.getElementById("gpFmtBtn");
-    const gpShareBtn = document.getElementById("gpShareBtn");
-
-    const createLine = (kind, message) => {
-        const line = document.createElement("div")
-        line.classList.add("line");
-        line.classList.add(kind);
-        line.textContent = message;
-        return line;
-    }
-
-    const waitingMsg = "Waiting for remote server...";
-
-    const executeRun = async () => {
-      editor.save();
-      gpResult.textContent = waitingMsg;
-      const result = await gp.compile(gpBody.value);
-      gpResult.textContent = "";
-      if (result.Errors !== "") {
-        const line = createLine("stderr", result.Errors);
-        gpResult.appendChild(line);
-        return;
-      }
-      for (const event of result.Events) {
-        const line = createLine(event.Kind, event.Message);
-        gpResult.appendChild(line);
-      }
-      gpResult.appendChild(createLine("system", `
-Program exited.`));
-    }
-
-    const executeFmt = async () => {
-      editor.save();
-      gpResult.textContent = waitingMsg;
-      const result = await gp.format(gpBody.value);
-      gpResult.textContent = "";
-      if (result.Error !== "") {
-        const line = createLine("stderr", result.Error);
-        gpResult.appendChild(line);
-        return;
-      }
-      gpBody.value = result.Body;
-      editor.setValue(result.Body);
-    }
-
-    const executeShare = async () => {
-      editor.save();
-      gpResult.textContent = waitingMsg;
-      const result = await gp.share(gpBody.value);
-      gpResult.innerHTML = "";
-      const link = document.createElement("a");
-      const url = `https://play.golang.org/p/${result}`;
-      link.textContent = url;
-      link.href = url;
-      link.target = "_blank";
-      gpResult.appendChild(link);
-    }
-
-    gpRunBtn.addEventListener("click", () => executeRun());
-    gpFmtBtn.addEventListener("click", () => executeFmt());
-    gpShareBtn.addEventListener("click", () => executeShare());
-
-    window.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        if (e.shiftKey) {
-          e.preventDefault();
-          executeRun();
-        }
-        if (e.ctrlKey) {
-          e.preventDefault();
-          executeFmt();
-        }
-      }
-    })
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/lib/codemirror.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/mode/go/go.js" integrity="sha256-Tgg9NnYSrp+/RdVXp/tw7yqwdONCRJNxfvavRgdjzdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.57.0/keymap/vim.js" integrity="sha256-crz2PM+EqIPrs8TOTTH0VDjFkpMTmkuCygpDpymsvs0=" crossorigin="anonymous"></script>
+  <script type="module" src="./example/index.js"></script>
 </body>
 </html>
