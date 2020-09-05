@@ -1,5 +1,15 @@
 #!/usr/bin/env node
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,6 +24,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const goplayground_1 = require("@syumai/goplayground");
+__exportStar(require("@syumai/goplayground"), exports);
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const form_data_1 = __importDefault(require("form-data"));
 const fs_1 = __importDefault(require("fs"));
@@ -22,6 +33,9 @@ const fs_1 = __importDefault(require("fs"));
 globalThis.fetch = node_fetch_1.default;
 // @ts-ignore
 globalThis.FormData = form_data_1.default;
+function loadData(filePath) {
+    return fs_1.default.readFileSync(filePath, "utf-8");
+}
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const gp = new goplayground_1.GoPlayground(goplayground_1.defaultGoPlaygroundHostName);
     if (process.argv.length < 4) {
@@ -29,11 +43,11 @@ globalThis.FormData = form_data_1.default;
         return;
     }
     const cmd = process.argv[2];
-    const filePath = process.argv[3];
-    const data = fs_1.default.readFileSync(filePath, "utf-8");
+    const arg = process.argv[3];
     switch (cmd) {
         case "run": {
-            const result = yield gp.compile(data);
+            const filePath = arg;
+            const result = yield gp.compile(loadData(filePath));
             if (result.Errors !== "") {
                 process.stderr.write(result.Errors);
                 break;
@@ -51,16 +65,23 @@ globalThis.FormData = form_data_1.default;
             break;
         }
         case "fmt": {
-            const result = yield gp.format(data);
+            const filePath = arg;
+            const result = yield gp.format(loadData(filePath));
             if (result.Error !== "") {
-                console.error(result.Error);
+                process.stderr.write(result.Error);
                 break;
             }
             process.stdout.write(result.Body);
             break;
         }
         case "share": {
-            const result = yield gp.share(data);
+            const filePath = arg;
+            const result = yield gp.share(loadData(filePath));
+            console.log(`https://play.golang.org/p/${result}`);
+            break;
+        }
+        case "download": {
+            const result = yield gp.download(arg);
             console.log(`https://play.golang.org/p/${result}`);
             break;
         }

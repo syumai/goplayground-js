@@ -2,6 +2,7 @@ export interface GoPlaygroundAPIClient {
   compile(body: string, withVet: boolean): Promise<CompileResult>;
   format(body: string, withImports: boolean): Promise<FormatResult>;
   share(body: string): Promise<string>;
+  download(key: string): Promise<string>;
 }
 
 /**
@@ -76,6 +77,16 @@ export class GoPlayground implements GoPlaygroundAPIClient {
       `${this.hostName}/share`,
       generateRequestInit(this.hostName, body)
     );
+    return await res.text();
+  }
+
+  async download(key: string): Promise<string> {
+    const res = await fetch(`${this.hostName}/p/${key}.go`, {
+      referrer: this.hostName,
+      referrerPolicy: "no-referrer-when-downgrade",
+      method: "GET",
+      mode: "cors",
+    });
     return await res.text();
   }
 }

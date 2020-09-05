@@ -1,6 +1,6 @@
 {
   "name": "@syumai/goplayground-node",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Go Playground API Client for Node.js.",
   "main": "index.js",
   "bin": "index.js",
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/syumai/goplayground-js#readme",
   "dependencies": {
-    "@syumai/goplayground": "^0.1.0",
+    "@syumai/goplayground": "^0.1.6",
     "form-data": "^3.0.0",
     "node-fetch": "^3.0.0-beta.8"
   },

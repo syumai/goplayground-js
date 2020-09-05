@@ -28,6 +28,15 @@ class GoPlayground {
         const res = await fetch(`${this.hostName}/share`, generateRequestInit(this.hostName, body));
         return await res.text();
     }
+    async download(key) {
+        const res = await fetch(`${this.hostName}/p/${key}.go`, {
+            referrer: this.hostName,
+            referrerPolicy: "no-referrer-when-downgrade",
+            method: "GET",
+            mode: "cors",
+        });
+        return await res.text();
+    }
 }
 exports.GoPlayground = GoPlayground;
 function generateRequestInit(referrer, body) {

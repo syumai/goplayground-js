@@ -15,7 +15,11 @@ globalThis.fetch = fetch;
 // @ts-ignore
 globalThis.FormData = FormData;
 
-type Command = "run" | "fmt" | "share";
+type Command = "run" | "fmt" | "share" | "download";
+
+function loadData(filePath: string): string {
+  return fs.readFileSync(filePath, "utf-8");
+}
 
 (async () => {
   const gp = new GoPlayground(defaultGoPlaygroundHostName);
@@ -26,12 +30,12 @@ type Command = "run" | "fmt" | "share";
   }
 
   const cmd = process.argv[2] as Command;
-  const filePath = process.argv[3];
-  const data = fs.readFileSync(filePath, "utf-8");
+  const arg = process.argv[3];
 
   switch (cmd) {
     case "run": {
-      const result = await gp.compile(data);
+      const filePath = arg;
+      const result = await gp.compile(loadData(filePath));
       if (result.Errors !== "") {
         process.stderr.write(result.Errors);
         break;
@@ -50,7 +54,8 @@ type Command = "run" | "fmt" | "share";
     }
 
     case "fmt": {
-      const result = await gp.format(data);
+      const filePath = arg;
+      const result = await gp.format(loadData(filePath));
       if (result.Error !== "") {
         process.stderr.write(result.Error);
         break;
@@ -60,7 +65,14 @@ type Command = "run" | "fmt" | "share";
     }
 
     case "share": {
-      const result = await gp.share(data);
+      const filePath = arg;
+      const result = await gp.share(loadData(filePath));
+      console.log(`https://play.golang.org/p/${result}`);
+      break;
+    }
+
+    case "download": {
+      const result = await gp.download(arg);
       console.log(`https://play.golang.org/p/${result}`);
       break;
     }

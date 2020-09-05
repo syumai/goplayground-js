@@ -2,6 +2,7 @@ export interface GoPlaygroundAPIClient {
     compile(body: string, withVet: boolean): Promise<CompileResult>;
     format(body: string, withImports: boolean): Promise<FormatResult>;
     share(body: string): Promise<string>;
+    download(key: string): Promise<string>;
 }
 /**
  * types for /compile
@@ -37,4 +38,5 @@ export declare class GoPlayground implements GoPlaygroundAPIClient {
     compile(body: string, withVet?: boolean): Promise<CompileResult>;
     format(body: string, withImports?: boolean): Promise<FormatResult>;
     share(body: string): Promise<string>;
+    download(key: string): Promise<string>;
 }

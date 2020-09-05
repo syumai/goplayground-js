@@ -40,6 +40,17 @@ export class GoPlayground {
             return yield res.text();
         });
     }
+    download(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const res = yield fetch(`${this.hostName}/p/${key}.go`, {
+                referrer: this.hostName,
+                referrerPolicy: "no-referrer-when-downgrade",
+                method: "GET",
+                mode: "cors",
+            });
+            return yield res.text();
+        });
+    }
 }
 function generateRequestInit(referrer, body) {
     return {
