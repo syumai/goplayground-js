@@ -36,6 +36,24 @@ const options =
     ? parsedOptions
     : defaultOptions;
 
+async function loadSharedContent() {
+  const params = new URLSearchParams(window.location.search);
+  const p = params.get("p");
+  const go2goEnabled = params.get("go2go") === "on";
+  if (p === "") {
+    return;
+  }
+  editor.setValue("");
+  let gp = gpOriginal;
+  if (go2goEnabled) {
+    options.go2go = true;
+    gp = gpGo2Go;
+  }
+  const result = await gp.download(p);
+  editor.setValue(result);
+}
+loadSharedContent();
+
 const gpResult = document.getElementById("gpResult");
 const gpOptions = document.getElementById("gpOptions");
 
@@ -49,6 +67,16 @@ const createLine = (kind, message) => {
   line.classList.add(kind);
   line.textContent = message;
   return line;
+};
+
+const createLink = (url) => {
+  const div = document.createElement("div");
+  const link = document.createElement("a");
+  link.textContent = url;
+  link.href = url;
+  link.target = "_blank";
+  div.appendChild(link);
+  return div;
 };
 
 const waitingMsg = "Waiting for remote server...";
@@ -90,17 +118,21 @@ async function executeFmt() {
   editor.setValue(result.Body);
 }
 
+function genShareQuery(key) {
+  let query = `?p=${key}`;
+  if (options.go2go) {
+    query += "&go2go=on";
+  }
+  return query;
+}
+
 async function executeShare() {
   editor.save();
   gpResult.textContent = waitingMsg;
   const result = await gp.share(gpBody.value);
   gpResult.innerHTML = "";
-  const link = document.createElement("a");
-  const url = `${gp.hostName}/p/${result}`;
-  link.textContent = url;
-  link.href = url;
-  link.target = "_blank";
-  gpResult.appendChild(link);
+  gpResult.appendChild(createLink(`${gp.hostName}/p/${result}`));
+  windo.history.replaceState({}, document.title, genShareQuery(result));
 }
 
 gpRunBtn.addEventListener("click", () => executeRun());
