@@ -127,13 +127,6 @@ func main() {
         return line;
     }
 
-    // gpBody.addEventListener('keydown', (e) => {
-    //   if (e.key === "Tab") {
-    //     e.preventDefault();
-    //     e.target.setRangeText("\t", e.target.selectionStart, e.target.selectionEnd, "end");
-    //   }
-    // });
-
     gpRunBtn.addEventListener("click", async () => {
       editor.save();
       const result = await gp.compile(gpBody.value);
