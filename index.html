@@ -54,6 +54,7 @@
       width: calc(100% - 16px);
       height: calc(300px - 16px);
       padding: 8px;
+      white-space: pre;
     }
 
     .result .line {
@@ -66,6 +67,10 @@
 
     .result .line.stderr {
       color: #c33;
+    }
+
+    .result .line.system {
+      color: #999;
     }
   </style>
 </head>
@@ -129,10 +134,13 @@ func main() {
         return line;
     }
 
-    gpRunBtn.addEventListener("click", async () => {
+    const waitingMsg = "Waiting for remote server...";
+
+    const executeRun = async () => {
       editor.save();
+      gpResult.textContent = waitingMsg;
       const result = await gp.compile(gpBody.value);
-      gpResult.innerHTML = "";
+      gpResult.textContent = "";
       if (result.Errors !== "") {
         const line = createLine("stderr", result.Errors);
         gpResult.appendChild(line);
@@ -142,12 +150,15 @@ func main() {
         const line = createLine(event.Kind, event.Message);
         gpResult.appendChild(line);
       }
-    });
+      gpResult.appendChild(createLine("system", `
+Program exited.`));
+    }
 
-    gpFmtBtn.addEventListener("click", async () => {
+    const executeFmt = async () => {
       editor.save();
+      gpResult.textContent = waitingMsg;
       const result = await gp.format(gpBody.value);
-      gpResult.innerHTML = "";
+      gpResult.textContent = "";
       if (result.Error !== "") {
         const line = createLine("stderr", result.Error);
         gpResult.appendChild(line);
@@ -155,9 +166,9 @@ func main() {
       }
       gpBody.value = result.Body;
       editor.setValue(result.Body);
-    });
+    }
 
-    gpShareBtn.addEventListener("click", async () => {
+    const executeShare = async () => {
       editor.save();
       const result = await gp.share(gpBody.value);
       gpResult.innerHTML = "";
@@ -167,7 +178,24 @@ func main() {
       link.href = url;
       link.target = "_blank";
       gpResult.appendChild(link);
-    });
+    }
+
+    gpRunBtn.addEventListener("click", () => executeRun());
+    gpFmtBtn.addEventListener("click", () => executeFmt());
+    gpShareBtn.addEventListener("click", () => executeShare());
+
+    window.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        if (e.shiftKey) {
+          e.preventDefault();
+          executeRun();
+        }
+        if (e.ctrlKey) {
+          e.preventDefault();
+          executeFmt();
+        }
+      }
+    })
   </script>
 </body>
 </html>
