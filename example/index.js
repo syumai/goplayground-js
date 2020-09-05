@@ -40,7 +40,7 @@ async function loadSharedContent() {
   const params = new URLSearchParams(window.location.search);
   const p = params.get("p");
   const go2goEnabled = params.get("go2go") === "on";
-  if (p === "") {
+  if (p === null) {
     return;
   }
   editor.setValue("");
@@ -132,7 +132,7 @@ async function executeShare() {
   const result = await gp.share(gpBody.value);
   gpResult.innerHTML = "";
   gpResult.appendChild(createLink(`${gp.hostName}/p/${result}`));
-  windo.history.replaceState({}, document.title, genShareQuery(result));
+  window.history.replaceState({}, document.title, genShareQuery(result));
 }
 
 gpRunBtn.addEventListener("click", () => executeRun());
