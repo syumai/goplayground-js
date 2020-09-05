@@ -35,7 +35,7 @@
     }
 
     .code-body {
-      display: hidden;
+      display: none;
     }
 
     .CodeMirror {
@@ -172,7 +172,7 @@ Program exited.`));
       editor.save();
       gpResult.textContent = waitingMsg;
       const result = await gp.share(gpBody.value);
-      gpResult.textContent = "";
+      gpResult.innerHTML = "";
       const link = document.createElement("a");
       const url = `https://play.golang.org/p/${result}`;
       link.textContent = url;
