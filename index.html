@@ -170,8 +170,9 @@ Program exited.`));
 
     const executeShare = async () => {
       editor.save();
+      gpResult.textContent = waitingMsg;
       const result = await gp.share(gpBody.value);
-      gpResult.innerHTML = "";
+      gpResult.textContent = "";
       const link = document.createElement("a");
       const url = `https://play.golang.org/p/${result}`;
       link.textContent = url;
