@@ -43,6 +43,12 @@ await gp.compile(src);
 await gp.share(src);
 ```
 
+## Demo
+
+* https://goplay.syumai.dev
+  - A customized version of The Go Playground with rich features.
+  - Repo: https://github.com/syumai/go-playground-custom
+
 ## Use `goplayground-node` as a CLI tool
 
 ### Installation
