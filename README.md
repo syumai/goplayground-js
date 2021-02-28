@@ -25,6 +25,12 @@ import { GoPlayground } from "https://unpkg.com/@syumai/goplayground/index.js";
 $ npm install --save @syumai/goplayground-node
 ```
 
+### For Deno
+
+```ts
+import { GoPlayground } from "https://deno.land/x/goplayground@0.1.6/index.ts";
+```
+
 ## Usage
 
 ```ts
