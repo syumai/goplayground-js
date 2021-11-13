@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/syumai/goplayground-js#readme",
   "devDependencies": {
-    "typescript": "^3.9.7"
+    "typescript": "^4.4.4"
   }
 }
